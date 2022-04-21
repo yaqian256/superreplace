@@ -84,7 +84,7 @@ def is_from_git_repo(path):
             path = os.path.dirname(path)
         subprocess.check_output(["git", "rev-parse", "--is-inside-work-tree"], cwd=path)
         return True
-    except subprocess.CalledProcessError:
+    except (subprocess.CalledProcessError, FileNotFoundError):
         return False
 
 
