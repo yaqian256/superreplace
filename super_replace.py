@@ -79,6 +79,8 @@ def is_binary(path):
 
 def is_from_git_repo(path):
     try:
+        if os.path.isfile(path):
+            path = os.path.dirname(path)
         subprocess.check_output(["git", "rev-parse", "--is-inside-work-tree"], cwd=path)
         return True
     except subprocess.CalledProcessError:
@@ -182,7 +184,7 @@ def remove_empty_folders(path):
 
 def get_files(path):
     if os.path.isfile(path):
-        return [path]
+        yield path
     for root, _, files in os.walk(path):
         for file in files:
             yield os.path.join(root, file)
@@ -191,6 +193,7 @@ def get_files(path):
 def replace_in_file_and_names(old, new, path, in_name, in_file, preserve_case):
     """replace string in files, including file and folder names, recursively"""
     use_git_mv = is_from_git_repo(path)
+
     for file in get_files(path):
         # The new file name.
         new_file = file
@@ -243,6 +246,7 @@ def main():
 
     preserve_case = not args.simple_replace
     for path in args.path:
+        print("processing " + path)
         replace_in_file_and_names(
             args.old, args.new, path, in_name, in_file, preserve_case
         )
