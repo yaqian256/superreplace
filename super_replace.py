@@ -79,6 +79,7 @@ def is_binary(path):
 
 def is_from_git_repo(path):
     try:
+        path = os.path.abspath(path)
         if os.path.isfile(path):
             path = os.path.dirname(path)
         subprocess.check_output(["git", "rev-parse", "--is-inside-work-tree"], cwd=path)
