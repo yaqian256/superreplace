@@ -29,7 +29,6 @@ def is_binary(path):
         ".cs",
         ".css",
         ".html",
-        ".ini",
         ".j2",
         ".js",
         ".json",
